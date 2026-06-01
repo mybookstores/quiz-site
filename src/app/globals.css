@@ -7,9 +7,14 @@
   --foreground: #881337;
 }
 
+.dark {
+  --background: #111827;
+  --foreground: #f9fafb;
+}
+
 @layer base {
   body {
-    @apply min-h-screen;
+    @apply min-h-screen transition-colors duration-300;
     background-color: var(--background);
     color: var(--foreground);
   }
@@ -40,6 +45,17 @@
   }
 }
 
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes pulse-soft {
   0%, 100% {
     opacity: 1;
@@ -49,17 +65,98 @@
   }
 }
 
+@keyframes bounce-gentle {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 .animate-fade-in {
   animation: fadeIn 0.4s ease-out forwards;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s ease-out forwards;
 }
 
 .animate-pulse-soft {
   animation: pulse-soft 1.5s ease-in-out infinite;
 }
 
+.animate-bounce-gentle {
+  animation: bounce-gentle 2s ease-in-out infinite;
+}
+
+.animate-scale-in {
+  animation: scale-in 0.4s ease-out forwards;
+}
+
+/* Staggered animation delays */
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+.stagger-4 { animation-delay: 0.4s; }
+.stagger-5 { animation-delay: 0.5s; }
+
 /* Share card styles */
 .share-card {
   background: linear-gradient(135deg, #FFF1F2 0%, #FFFFFF 100%);
   border-radius: 1.5rem;
   box-shadow: 0 4px 20px rgba(225, 29, 72, 0.1);
+}
+
+/* Result card glow effect */
+.result-glow {
+  box-shadow: 0 0 40px rgba(225, 29, 72, 0.15);
+}
+
+.dark .result-glow {
+  box-shadow: 0 0 40px rgba(225, 29, 72, 0.25);
+}
+
+/* Progress bar animation */
+.progress-bar {
+  transition: width 0.5s ease-out;
+}
+
+/* Button press effect */
+.btn-press:active {
+  transform: scale(0.98);
+}
+
+/* Dark mode specific styles */
+.dark body {
+  background-color: #111827;
+  color: #f9fafb;
+}
+
+.dark .bg-white {
+  background-color: #1f2937;
+}
+
+.dark .bg-gray-50,
+.dark .bg-gray-100 {
+  background-color: #374151;
+}
+
+/* PWA styles */
+@media (display-mode: standalone) {
+  body {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
 }

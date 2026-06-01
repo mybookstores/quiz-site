@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import clsx from "clsx";
-import { questions, calculateResult, results, type Result } from "@/data/quiz";
+import { questions, results, type Result } from "@/data/quiz";
 import ProgressBar from "@/components/ProgressBar";
 import OptionCard from "@/components/OptionCard";
 import ScoreBar from "@/components/ScoreBar";
+import ShareCard from "@/components/ShareCard";
 
 // 计算用户最终结果
 function computeResult(scores: {
@@ -14,23 +15,7 @@ function computeResult(scores: {
   chaos: number;
   social: number;
 }): Result {
-  // 找出最高分维度
-  const maxDimension = Object.entries(scores).reduce((a, b) =>
-    b[1] > a[1] ? b : a
-  )[0];
-
-  // 根据维度匹配结果
-  const mapping: Record<string, string> = {
-    mystery: "low-profile",
-    expression: "real",
-    chaos: "chaos",
-    social: "vibe",
-  };
-
   // 处理混合情况
-  const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
-  const [top, second] = sorted;
-
   // 如果神秘感极高
   if (scores.mystery >= 15) return results.find(r => r.id === "npc")!;
 
@@ -49,9 +34,38 @@ function computeResult(scores: {
     return results.find(r => r.id === "night")!;
   }
 
-  // 根据主维度返回
-  const resultId = mapping[top[0]] || mapping[maxDimension];
-  return results.find(r => r.id === resultId) || results[0];
+  // 找出最高分维度
+  const maxDimension = Object.entries(scores).reduce((a, b) =>
+    b[1] > a[1] ? b : a
+  )[0];
+
+  // 根据维度匹配结果
+  const mapping: Record<string, string> = {
+    mystery: "low-profile",
+    expression: "real",
+    chaos: "chaos",
+    social: "vibe",
+  };
+
+  const resultId = mapping[maxDimension];
+  return results.find(r => r.id === resultId) ?? results[0];
+}
+
+// 生成随机百分比（基于结果的稀有度）
+function generatePercentage(resultId: string): number {
+  const rarity: Record<string, [number, number]> = {
+    npc: [30, 50],
+    night: [40, 60],
+    curator: [50, 70],
+    vibe: [60, 80],
+    chaos: [45, 70],
+    real: [50, 75],
+    "low-profile": [35, 55],
+    nonsense: [55, 80],
+  };
+
+  const [min, max] = rarity[resultId] ?? [50, 80];
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 type Page = "home" | "quiz" | "analyzing" | "result";
@@ -67,6 +81,48 @@ export default function Home() {
   });
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [result, setResult] = useState<Result | null>(null);
+  const [percentage, setPercentage] = useState<number>(0);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  // 监听系统暗色模式
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    setIsDarkMode(mediaQuery.matches);
+
+    const handler = (e: MediaQueryListEvent) => setIsDarkMode(e.matches);
+    mediaQuery.addEventListener("change", handler);
+    return () => mediaQuery.removeEventListener("change", handler);
+  }, []);
+
+  // 设置暗色模式 class
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", isDarkMode);
+  }, [isDarkMode]);
+
+  // 微信分享优化
+  useEffect(() => {
+    if (page === "result" && result) {
+      const shareData = {
+        title: `我是「${result.title}」！来测测你的朋友圈人设`,
+        desc: result.tagline,
+        link: "https://mybookstores.github.io/quiz-site",
+        imgUrl: "https://mybookstores.github.io/quiz-site/og-image.png",
+      };
+
+      // 更新页面标题
+      document.title = shareData.title;
+
+      // 尝试调用微信 JSSDK（需要后端支持，这里做基础优化）
+      if ((window as any).wx) {
+        (window as any).wx.updateAppMessageShareData(shareData);
+        (window as any).wx.updateTimelineShareData({
+          title: shareData.title,
+          link: shareData.link,
+          imgUrl: shareData.imgUrl,
+        });
+      }
+    }
+  }, [page, result]);
 
   const handleStart = () => {
     setPage("quiz");
@@ -77,7 +133,6 @@ export default function Home() {
   const handleSelectOption = (optionIndex: number) => {
     setSelectedOption(optionIndex);
 
-    // 添加分数
     const question = questions[currentQuestion];
     const selectedScore = question.options[optionIndex].scores;
     setScores(prev => ({
@@ -87,18 +142,16 @@ export default function Home() {
       social: prev.social + selectedScore.social,
     }));
 
-    // 延迟后进入下一题或结果
     setTimeout(() => {
       if (currentQuestion < questions.length - 1) {
         setCurrentQuestion(prev => prev + 1);
         setSelectedOption(null);
       } else {
-        // 显示分析页面
         setPage("analyzing");
         const computed = computeResult(scores);
         setResult(computed);
+        setPercentage(generatePercentage(computed.id));
 
-        // 3秒后显示结果
         setTimeout(() => {
           setPage("result");
         }, 3000);
@@ -112,44 +165,85 @@ export default function Home() {
     setScores({ expression: 0, mystery: 0, chaos: 0, social: 0 });
     setSelectedOption(null);
     setResult(null);
+    document.title = "你的朋友圈隐藏人设测试";
+  };
+
+  const toggleDarkMode = () => {
+    setIsDarkMode(prev => !prev);
   };
 
   return (
-    <main className="min-h-screen px-4 py-8 flex flex-col items-center justify-center">
+    <main className={clsx(
+      "min-h-screen px-4 py-8 flex flex-col items-center justify-center transition-colors duration-300",
+      isDarkMode ? "bg-gray-900" : "bg-[#FFF1F2]"
+    )}>
+      {/* 暗色模式切换按钮 */}
+      <button
+        onClick={toggleDarkMode}
+        className={clsx(
+          "fixed top-4 right-4 p-2 rounded-full transition-all duration-200",
+          "hover:scale-110 active:scale-95",
+          isDarkMode ? "bg-gray-800 text-yellow-400" : "bg-white/80 text-gray-600"
+        )}
+        aria-label="切换暗色模式"
+      >
+        {isDarkMode ? (
+          <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        ) : (
+          <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+          </svg>
+        )}
+      </button>
+
       {/* 首页 */}
       {page === "home" && (
         <div className="animate-fade-in max-w-md w-full text-center space-y-8">
           <div className="space-y-4">
-            <h1 className="text-3xl font-bold text-dark leading-relaxed">
+            <h1 className={clsx(
+              "text-3xl font-bold leading-relaxed",
+              isDarkMode ? "text-white" : "text-[#881337]"
+            )}>
               你的朋友圈隐藏人设测试
             </h1>
-            <p className="text-gray-500 text-base leading-relaxed">
+            <p className={clsx(
+              "text-base leading-relaxed",
+              isDarkMode ? "text-gray-400" : "text-gray-500"
+            )}>
               你以为你只是随便发发，<br />别人可能早就给你立好了人设。
             </p>
           </div>
 
           {/* 漂浮标签 */}
           <div className="relative h-48">
-            <div className="absolute top-0 left-4 animate-pulse-soft">
-              <span className="px-3 py-1 bg-pink-100 text-pink-600 rounded-full text-sm font-medium">
-                神秘 NPC
-              </span>
-            </div>
-            <div className="absolute top-12 right-0 animate-pulse-soft" style={{ animationDelay: "0.2s" }}>
-              <span className="px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-sm font-medium">
-                气氛组组长
-              </span>
-            </div>
-            <div className="absolute bottom-8 left-0 animate-pulse-soft" style={{ animationDelay: "0.4s" }}>
-              <span className="px-3 py-1 bg-amber-100 text-amber-600 rounded-full text-sm font-medium">
-                深夜诗人
-              </span>
-            </div>
-            <div className="absolute bottom-0 right-4 animate-pulse-soft" style={{ animationDelay: "0.6s" }}>
-              <span className="px-3 py-1 bg-green-100 text-green-600 rounded-full text-sm font-medium">
-                快乐废话机
-              </span>
-            </div>
+            {[
+              { text: "神秘 NPC", class: isDarkMode ? "bg-purple-900/50 text-purple-300" : "bg-pink-100 text-pink-600" },
+              { text: "气氛组组长", class: isDarkMode ? "bg-blue-900/50 text-blue-300" : "bg-blue-100 text-blue-600" },
+              { text: "深夜诗人", class: isDarkMode ? "bg-amber-900/50 text-amber-300" : "bg-amber-100 text-amber-600" },
+              { text: "快乐废话机", class: isDarkMode ? "bg-green-900/50 text-green-300" : "bg-green-100 text-green-600" },
+            ].map((tag, i) => (
+              <div
+                key={i}
+                className={clsx(
+                  "absolute rounded-full text-sm font-medium animate-pulse-soft",
+                  tag.class,
+                  i === 0 && "top-0 left-4",
+                  i === 1 && "top-12 right-0",
+                  i === 2 && "bottom-8 left-0",
+                  i === 3 && "bottom-0 right-4"
+                )}
+                style={{ animationDelay: `${i * 0.2}s` }}
+              >
+                <span className={clsx(
+                  "px-3 py-1 rounded-full block",
+                  isDarkMode ? "bg-inherit" : "bg-inherit"
+                )}>
+                  {tag.text}
+                </span>
+              </div>
+            ))}
           </div>
 
           <button
@@ -159,7 +253,7 @@ export default function Home() {
             开始测试
           </button>
 
-          <div className="flex justify-center gap-6 text-sm text-gray-400">
+          <div className={clsx("flex justify-center gap-6 text-sm", isDarkMode ? "text-gray-500" : "text-gray-400")}>
             <span>12 道题</span>
             <span>1 分钟完成</span>
             <span>生成专属人设卡</span>
@@ -176,7 +270,10 @@ export default function Home() {
           />
 
           <div className="space-y-6">
-            <h2 className="text-xl font-bold text-dark text-center">
+            <h2 className={clsx(
+              "text-xl font-bold text-center",
+              isDarkMode ? "text-white" : "text-[#881337]"
+            )}>
               {questions[currentQuestion].text}
             </h2>
 
@@ -188,12 +285,13 @@ export default function Home() {
                   index={index}
                   selected={selectedOption === index}
                   onClick={() => selectedOption === null && handleSelectOption(index)}
+                  isDark={isDarkMode}
                 />
               ))}
             </div>
           </div>
 
-          <div className="text-center text-sm text-gray-400">
+          <div className={clsx("text-center text-sm", isDarkMode ? "text-gray-500" : "text-gray-400")}>
             点击选项自动进入下一题
           </div>
         </div>
@@ -209,15 +307,22 @@ export default function Home() {
           </div>
 
           <div className="space-y-2">
-            <p className="text-lg font-medium text-dark animate-pulse-soft">
-              正在读取你的朋友圈气质...
-            </p>
-            <p className="text-sm text-gray-400 animate-pulse-soft" style={{ animationDelay: "0.3s" }}>
-              正在分析你的点赞习惯...
-            </p>
-            <p className="text-sm text-gray-400 animate-pulse-soft" style={{ animationDelay: "0.6s" }}>
-              正在生成你的隐藏人设卡...
-            </p>
+            {[
+              "正在读取你的朋友圈气质...",
+              "正在分析你的点赞习惯...",
+              "正在生成你的隐藏人设卡...",
+            ].map((text, i) => (
+              <p
+                key={i}
+                className={clsx(
+                  "text-lg font-medium animate-pulse-soft",
+                  i === 0 ? (isDarkMode ? "text-white" : "text-[#881337]") : (isDarkMode ? "text-gray-500" : "text-gray-400")
+                )}
+                style={{ animationDelay: `${i * 0.3}s` }}
+              >
+                {text}
+              </p>
+            ))}
           </div>
         </div>
       )}
@@ -226,13 +331,24 @@ export default function Home() {
       {page === "result" && result && (
         <div className="animate-fade-in max-w-md w-full space-y-6">
           {/* 结果卡片 */}
-          <div className="bg-white rounded-3xl p-6 shadow-lg space-y-4">
+          <div className={clsx(
+            "rounded-3xl p-6 shadow-lg space-y-4",
+            isDarkMode ? "bg-gray-800" : "bg-white"
+          )}>
             <div className="text-center space-y-3">
               <div className="inline-block px-4 py-1 bg-gradient-to-r from-pink to-accent text-white text-sm font-medium rounded-full">
                 你的隐藏人设
               </div>
-              <h2 className="text-2xl font-bold text-dark">{result.title}</h2>
-              <p className="text-gray-500 text-sm leading-relaxed">
+              <h2 className={clsx(
+                "text-2xl font-bold",
+                isDarkMode ? "text-white" : "text-[#881337]"
+              )}>
+                {result.title}
+              </h2>
+              <p className={clsx(
+                "text-sm leading-relaxed",
+                isDarkMode ? "text-gray-400" : "text-gray-500"
+              )}>
                 {result.tagline}
               </p>
             </div>
@@ -242,7 +358,10 @@ export default function Home() {
               {result.keywords.map((keyword, index) => (
                 <span
                   key={index}
-                  className="px-3 py-1 bg-pink-50 text-pink-600 rounded-full text-sm"
+                  className={clsx(
+                    "px-3 py-1 rounded-full text-sm",
+                    isDarkMode ? "bg-gray-700 text-gray-300" : "bg-pink-50 text-pink-600"
+                  )}
                 >
                   {keyword}
                 </span>
@@ -251,48 +370,84 @@ export default function Home() {
 
             {/* 四项指数 */}
             <div className="space-y-3 pt-2">
-              <ScoreBar label="表达欲" value={result.scores.expression} color="bg-gradient-to-r from-blue-400 to-blue-500" />
-              <ScoreBar label="神秘感" value={result.scores.mystery} color="bg-gradient-to-r from-purple-400 to-purple-500" />
-              <ScoreBar label="发疯指数" value={result.scores.chaos} color="bg-gradient-to-r from-amber-400 to-orange-500" />
-              <ScoreBar label="社交电量" value={result.scores.social} color="bg-gradient-to-r from-green-400 to-emerald-500" />
+              <ScoreBar label="表达欲" value={result.scores.expression} color="bg-gradient-to-r from-blue-400 to-blue-500" isDark={isDarkMode} />
+              <ScoreBar label="神秘感" value={result.scores.mystery} color="bg-gradient-to-r from-purple-400 to-purple-500" isDark={isDarkMode} />
+              <ScoreBar label="发疯指数" value={result.scores.chaos} color="bg-gradient-to-r from-amber-400 to-orange-500" isDark={isDarkMode} />
+              <ScoreBar label="社交电量" value={result.scores.social} color="bg-gradient-to-r from-green-400 to-emerald-500" isDark={isDarkMode} />
             </div>
 
             {/* 代表文案 */}
-            <div className="bg-gray-50 rounded-2xl p-4 text-center">
-              <p className="text-gray-500 text-sm">朋友圈代表文案</p>
-              <p className="text-lg font-medium text-dark mt-1">
+            <div className={clsx(
+              "rounded-2xl p-4 text-center",
+              isDarkMode ? "bg-gray-700" : "bg-gray-50"
+            )}>
+              <p className={clsx("text-sm", isDarkMode ? "text-gray-500" : "text-gray-500")}>
+                朋友圈代表文案
+              </p>
+              <p className={clsx(
+                "text-lg font-medium mt-1",
+                isDarkMode ? "text-white" : "text-[#881337]"
+              )}>
                 「{result.quote}」
               </p>
             </div>
 
             {/* 结果描述 */}
-            <p className="text-gray-600 text-sm leading-relaxed text-center">
+            <p className={clsx(
+              "text-sm leading-relaxed text-center",
+              isDarkMode ? "text-gray-400" : "text-gray-600"
+            )}>
               {result.description}
             </p>
+
+            {/* 百分比统计 */}
+            <div className={clsx(
+              "rounded-2xl p-4 text-center",
+              isDarkMode ? "bg-pink-900/30" : "bg-pink-50"
+            )}>
+              <p className={clsx(
+                "text-lg font-bold",
+                isDarkMode ? "text-pink-400" : "text-pink-500"
+              )}>
+                🏆 你超过了 {percentage}% 的测试者
+              </p>
+            </div>
           </div>
 
           {/* 建议 */}
-          <div className="bg-gradient-to-r from-pink/10 to-accent/10 rounded-2xl p-4 text-center">
-            <p className="text-sm text-dark">
+          <div className={clsx(
+            "rounded-2xl p-4 text-center",
+            isDarkMode ? "bg-gray-800/50" : "bg-gradient-to-r from-pink/10 to-accent/10"
+          )}>
+            <p className={clsx(
+              "text-sm",
+              isDarkMode ? "text-gray-300" : "text-[#881337]"
+            )}>
               💡 {result.advice}
             </p>
           </div>
 
+          {/* 分享功能 */}
+          <ShareCard result={result} percentage={percentage} />
+
           {/* 操作按钮 */}
-          <div className="space-y-3">
-            <button
-              onClick={handleRestart}
-              className="w-full py-4 bg-gradient-to-r from-pink to-accent text-white font-bold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200"
-            >
-              再测一次
-            </button>
-            <button className="w-full py-3 bg-white text-pink font-medium rounded-2xl border-2 border-pink/20 hover:bg-pink/5 transition-all duration-200">
-              分享给朋友
-            </button>
-          </div>
+          <button
+            onClick={handleRestart}
+            className={clsx(
+              "w-full py-4 rounded-2xl shadow-lg transition-all duration-200 font-bold",
+              isDarkMode
+                ? "bg-gray-800 text-white hover:bg-gray-700"
+                : "bg-gradient-to-r from-pink to-accent text-white hover:shadow-xl"
+            )}
+          >
+            再测一次
+          </button>
 
           {/* 底部提示 */}
-          <p className="text-center text-xs text-gray-400">
+          <p className={clsx(
+            "text-center text-xs",
+            isDarkMode ? "text-gray-600" : "text-gray-400"
+          )}>
             结果仅供娱乐，请勿当真
           </p>
         </div>

@@ -7,6 +7,7 @@ interface OptionCardProps {
   index: number;
   onClick: () => void;
   selected?: boolean;
+  isDark?: boolean;
 }
 
 export default function OptionCard({
@@ -14,6 +15,7 @@ export default function OptionCard({
   index,
   onClick,
   selected,
+  isDark = false,
 }: OptionCardProps) {
   const letters = ["A", "B", "C", "D"];
   const colors = [
@@ -39,13 +41,15 @@ export default function OptionCard({
         "min-h-[56px]",
         selected
           ? `${colors[index]} border-current shadow-md`
-          : "bg-white/60 border-transparent hover:bg-white/80"
+          : isDark
+            ? "bg-gray-800/50 border-transparent hover:bg-gray-700/50"
+            : "bg-white/60 border-transparent hover:bg-white/80"
       )}
     >
       <span
         className={clsx(
           "flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center font-bold text-sm",
-          selected ? letterColors[index] : "bg-gray-100 text-gray-400"
+          selected ? letterColors[index] : isDark ? "bg-gray-700 text-gray-400" : "bg-gray-100 text-gray-400"
         )}
       >
         {letters[index]}
@@ -53,7 +57,7 @@ export default function OptionCard({
       <span
         className={clsx(
           "font-medium leading-relaxed",
-          selected ? "text-dark" : "text-gray-600"
+          selected ? "text-dark" : isDark ? "text-gray-300" : "text-gray-600"
         )}
       >
         {text}

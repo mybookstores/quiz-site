@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFF1F2"/>
+      <stop offset="100%" style="stop-color:#FFFFFF"/>
+    </linearGradient>
+    <linearGradient id="btnGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#FB7185"/>
+      <stop offset="100%" style="stop-color:#E11D48"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGrad)"/>
+
+  <!-- Decorative circles -->
+  <circle cx="100" cy="100" r="150" fill="#FB7185" opacity="0.1"/>
+  <circle cx="1100" cy="530" r="180" fill="#E11D48" opacity="0.1"/>
+  <circle cx="1050" cy="150" r="80" fill="#2563EB" opacity="0.1"/>
+
+  <!-- Badge -->
+  <rect x="500" y="80" width="200" height="36" rx="18" fill="url(#btnGrad)"/>
+  <text x="600" y="105" font-family="sans-serif" font-size="14" fill="white" text-anchor="middle" font-weight="600">🔥 热门测试</text>
+
+  <!-- Title -->
+  <text x="600" y="220" font-family="sans-serif" font-size="56" fill="#881337" text-anchor="middle" font-weight="bold">你的朋友圈隐藏人设</text>
+  <text x="600" y="290" font-family="sans-serif" font-size="56" fill="#881337" text-anchor="middle" font-weight="bold">测试</text>
+
+  <!-- Subtitle -->
+  <text x="600" y="360" font-family="sans-serif" font-size="22" fill="#6B7280" text-anchor="middle">你以为你只是随便发发，别人可能早就给你立好了人设</text>
+
+  <!-- Tags -->
+  <rect x="280" y="400" width="140" height="36" rx="18" fill="#FCE7F3"/>
+  <text x="350" y="425" font-family="sans-serif" font-size="16" fill="#DB2777" text-anchor="middle" font-weight="500">🎭 8种人设</text>
+
+  <rect x="440" y="400" width="160" height="36" rx="18" fill="#DBEAFE"/>
+  <text x="520" y="425" font-family="sans-serif" font-size="16" fill="#2563EB" text-anchor="middle" font-weight="500">⏱️ 1分钟完成</text>
+
+  <rect x="620" y="400" width="160" height="36" rx="18" fill="#FEF3C7"/>
+  <text x="700" y="425" font-family="sans-serif" font-size="16" fill="#D97706" text-anchor="middle" font-weight="500">📤 支持分享</text>
+
+  <rect x="800" y="400" width="140" height="36" rx="18" fill="#D1FAE5"/>
+  <text x="870" y="425" font-family="sans-serif" font-size="16" fill="#059669" text-anchor="middle" font-weight="500">💾 保存图片</text>
+
+  <!-- CTA Button -->
+  <rect x="450" y="480" width="300" height="60" rx="30" fill="url(#btnGrad)"/>
+  <text x="600" y="518" font-family="sans-serif" font-size="22" fill="white" text-anchor="middle" font-weight="bold">开始测试 →</text>
+
+  <!-- Footer -->
+  <text x="600" y="590" font-family="sans-serif" font-size="14" fill="#9CA3AF" text-anchor="middle">12道题 · 生成专属人设卡 · 微信分享</text>
+</svg>
