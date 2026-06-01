@@ -200,119 +200,94 @@ export default function Home() {
 
       {/* 首页 */}
       {page === "home" && (
-        <div className="animate-fade-in max-w-md w-full">
-          {/* 顶部装饰背景 */}
-          <div className="relative mb-6">
-            {/* 渐变背景 */}
-            <div className={clsx(
-              "absolute inset-x-0 -top-8 h-48 rounded-b-[3rem]",
-              isDarkMode
-                ? "bg-gradient-to-b from-gray-800 to-transparent"
-                : "bg-gradient-to-b from-rose-100 via-pink-50 to-transparent"
-            )} />
-
-            {/* 主图标 */}
-            <div className="relative pt-8 text-center">
-              <div className={clsx(
-                "w-24 h-24 mx-auto rounded-[2rem] flex items-center justify-center",
-                isDarkMode
-                  ? "bg-gradient-to-br from-pink-600 to-rose-700"
-                  : "bg-gradient-to-br from-rose-400 to-pink-500"
-              )}>
-                <span className={clsx(
-                  "text-4xl font-black tracking-tight",
-                  isDarkMode ? "text-white" : "text-white"
-                )}>测</span>
-              </div>
-            </div>
-          </div>
-
+        <div className="animate-fade-in max-w-md w-full text-center space-y-8">
           {/* 标题 */}
-          <div className="text-center px-4 mb-6">
+          <div className="space-y-4">
             <h1 className={clsx(
-              "text-2xl font-black tracking-tight mb-2",
-              isDarkMode ? "text-white" : "text-gray-900"
+              "text-3xl font-bold leading-relaxed",
+              isDarkMode ? "text-white" : "text-[#881337]"
             )}>
-              朋友圈隐藏人设
+              你的朋友圈隐藏人设测试
             </h1>
             <p className={clsx(
-              "text-sm",
-              isDarkMode ? "text-gray-500" : "text-gray-400"
+              "text-base leading-relaxed",
+              isDarkMode ? "text-gray-400" : "text-gray-500"
             )}>
-              12道题 · 测出你在朋友圈的真实人设
+              你以为你只是随便发发，<br />别人可能早就给你立好了人设。
             </p>
           </div>
 
-          {/* 特色展示卡片 */}
+          {/* 人设预览卡片 */}
           <div className={clsx(
-            "mx-4 p-5 rounded-3xl mb-6",
-            isDarkMode ? "bg-gray-800/80" : "bg-white shadow-sm"
+            "rounded-3xl p-6",
+            isDarkMode ? "bg-gray-800/50" : "bg-white/80"
           )}>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-4 gap-3">
               {[
-                { icon: "🎭", num: "8", label: "种人设" },
-                { icon: "📤", num: "1", label: "键分享" },
-                { icon: "⚡", num: "1", label: "分钟" },
+                { label: "神秘NPC", bg: "bg-pink-100", darkBg: "bg-pink-900/30", text: "text-pink-600", darkText: "text-pink-300" },
+                { label: "营业艺术家", bg: "bg-blue-100", darkBg: "bg-blue-900/30", text: "text-blue-600", darkText: "text-blue-300" },
+                { label: "发疯选手", bg: "bg-amber-100", darkBg: "bg-amber-900/30", text: "text-amber-600", darkText: "text-amber-300" },
+                { label: "气氛组长", bg: "bg-green-100", darkBg: "bg-green-900/30", text: "text-green-600", darkText: "text-green-300" },
+                { label: "深夜诗人", bg: "bg-indigo-100", darkBg: "bg-indigo-900/30", text: "text-indigo-600", darkText: "text-indigo-300" },
+                { label: "真实记录", bg: "bg-purple-100", darkBg: "bg-purple-900/30", text: "text-purple-600", darkText: "text-purple-300" },
+                { label: "废话机器", bg: "bg-orange-100", darkBg: "bg-orange-900/30", text: "text-orange-600", darkText: "text-orange-300" },
+                { label: "潜水观察", bg: "bg-gray-100", darkBg: "bg-gray-700/30", text: "text-gray-600", darkText: "text-gray-400" },
               ].map((item, i) => (
                 <div key={i} className="text-center">
-                  <div className="text-2xl mb-1">{item.icon}</div>
                   <div className={clsx(
-                    "text-xl font-black",
-                    isDarkMode ? "text-white" : "text-gray-900"
-                  )}>{item.num}</div>
-                  <div className={clsx(
-                    "text-xs",
-                    isDarkMode ? "text-gray-500" : "text-gray-400"
-                  )}>{item.label}</div>
+                    "w-12 h-12 mx-auto rounded-2xl flex items-center justify-center mb-1",
+                    isDarkMode ? item.darkBg : item.bg
+                  )}>
+                    <span className={clsx(isDarkMode ? item.darkText : item.text)}>
+                      {["🎭", "🎨", "🌪️", "🎉", "🌙", "📸", "💬", "🔇"][i]}
+                    </span>
+                  </div>
+                  <span className={clsx("text-xs", isDarkMode ? item.darkText : item.text)}>
+                    {item.label}
+                  </span>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* 人设标签 */}
-          <div className={clsx(
-            "mx-4 p-4 rounded-2xl mb-8",
-            isDarkMode ? "bg-gray-800/50" : "bg-gray-50"
-          )}>
-            <div className="flex flex-wrap justify-center gap-2">
-              {["神秘人", "营业艺术家", "发疯选手", "气氛组长", "深夜诗人", "真实记录", "废话机器", "潜水观察"].map((tag, i) => (
-                <span
-                  key={i}
-                  className={clsx(
-                    "px-3 py-1 rounded-full text-xs font-medium",
-                    isDarkMode
-                      ? "bg-gray-700 text-gray-300"
-                      : "bg-white text-gray-600 shadow-sm"
-                  )}
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
+          {/* 数据统计 */}
+          <div className="flex justify-center gap-8">
+            {[
+              { num: "8", label: "种人设" },
+              { num: "12", label: "道题" },
+              { num: "1", label: "分钟" },
+            ].map((stat, i) => (
+              <div key={i} className="text-center">
+                <div className={clsx(
+                  "text-2xl font-bold",
+                  isDarkMode ? "text-white" : "text-[#881337]"
+                )}>
+                  {stat.num}
+                </div>
+                <div className={clsx(
+                  "text-xs",
+                  isDarkMode ? "text-gray-500" : "text-gray-400"
+                )}>
+                  {stat.label}
+                </div>
+              </div>
+            ))}
           </div>
 
           {/* 开始按钮 */}
-          <div className="px-4">
-            <button
-              onClick={handleStart}
-              className={clsx(
-                "w-full py-4 rounded-2xl font-black text-base transition-all duration-200",
-                isDarkMode
-                  ? "bg-white text-gray-900 hover:bg-gray-100"
-                  : "bg-gray-900 text-white hover:bg-gray-800"
-              )}
-            >
-              开始测试 →
-            </button>
-          </div>
+          <button
+            onClick={handleStart}
+            className="w-full py-4 bg-gradient-to-r from-pink-500 to-accent text-white font-bold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+          >
+            开始测试
+          </button>
 
-          {/* 底部 */}
-          <p className={clsx(
-            "text-center mt-6 text-xs",
-            isDarkMode ? "text-gray-600" : "text-gray-400"
-          )}>
-            10,000+ 人已测试
-          </p>
+          {/* 底部提示 */}
+          <div className={clsx("flex justify-center gap-6 text-sm", isDarkMode ? "text-gray-500" : "text-gray-400")}>
+            <span>12 道题</span>
+            <span>1 分钟完成</span>
+            <span>生成专属人设卡</span>
+          </div>
         </div>
       )}
 
