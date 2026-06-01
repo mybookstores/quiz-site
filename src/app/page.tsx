@@ -203,7 +203,7 @@ export default function Home() {
         <div className="animate-fade-in max-w-md w-full text-center">
           {/* 标题 */}
           <div className="space-y-4 mb-8">
-            {/* 品牌图标 - 简洁圆形 */}
+            {/* 品牌图标 */}
             <div className="flex justify-center mb-4">
               <div className="w-16 h-16 rounded-2xl bg-gray-900 flex items-center justify-center">
                 <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -226,30 +226,8 @@ export default function Home() {
             </p>
           </div>
 
-          {/* 人设预览 - 简洁标签样式 */}
-          <div className={clsx(
-            "rounded-2xl p-5 mb-8",
-            isDarkMode ? "bg-gray-800/40" : "bg-gray-50"
-          )}>
-            <div className="flex flex-wrap justify-center gap-2">
-              {["神秘人", "艺术家", "发疯", "组长", "诗人", "记录", "废话", "潜水"].map((label, i) => (
-                <span
-                  key={i}
-                  className={clsx(
-                    "px-4 py-2 rounded-full text-sm font-medium",
-                    isDarkMode
-                      ? "bg-gray-700 text-gray-200"
-                      : "bg-white text-gray-700 shadow-sm"
-                  )}
-                >
-                  {label}
-                </span>
-              ))}
-            </div>
-          </div>
-
           {/* 数据 */}
-          <div className="flex justify-center gap-12 mb-8">
+          <div className="flex justify-center gap-12 mb-10">
             {[
               { num: "8", label: "人设" },
               { num: "12", label: "道题" },
@@ -272,7 +250,7 @@ export default function Home() {
             ))}
           </div>
 
-          {/* 开始按钮 - 简洁黑色 */}
+          {/* 开始按钮 */}
           <button
             onClick={handleStart}
             className={clsx(
@@ -287,7 +265,7 @@ export default function Home() {
 
           {/* 底部 */}
           <p className={clsx(
-            "mt-4 text-xs",
+            "mt-6 text-xs",
             isDarkMode ? "text-gray-600" : "text-gray-400"
           )}>
             10,000+ 人已测试
