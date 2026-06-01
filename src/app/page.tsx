@@ -226,30 +226,8 @@ export default function Home() {
             </p>
           </div>
 
-          {/* 人设预览 */}
-          <div className={clsx(
-            "rounded-2xl p-5 mb-8",
-            isDarkMode ? "bg-gray-800/40" : "bg-gray-50"
-          )}>
-            <div className="flex flex-wrap justify-center gap-2">
-              {["神秘人", "艺术家", "发疯", "组长", "诗人", "记录", "废话", "潜水"].map((label, i) => (
-                <span
-                  key={i}
-                  className={clsx(
-                    "px-4 py-2 rounded-full text-sm font-medium",
-                    isDarkMode
-                      ? "bg-gray-700 text-gray-200"
-                      : "bg-white text-gray-700 shadow-sm"
-                  )}
-                >
-                  {label}
-                </span>
-              ))}
-            </div>
-          </div>
-
           {/* 数据 */}
-          <div className="flex justify-center gap-12 mb-8">
+          <div className="flex justify-center gap-12 mb-10">
             {[
               { num: "8", label: "人设" },
               { num: "12", label: "道题" },

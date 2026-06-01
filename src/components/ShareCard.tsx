@@ -67,44 +67,44 @@ export default function ShareCard({ result, percentage }: ShareCardProps) {
           width: "360px",
           backgroundColor: "#ffffff",
           fontFamily: "system-ui, -apple-system, 'PingFang SC', sans-serif",
-          padding: "32px 24px",
+          padding: "28px 20px",
           boxSizing: "border-box",
         }}
       >
         {/* 品牌标识 */}
-        <div style={{ textAlign: "center", marginBottom: "20px" }}>
+        <div style={{ textAlign: "center", marginBottom: "16px" }}>
           <div style={{
             display: "inline-flex",
             alignItems: "center",
-            gap: "8px",
-            marginBottom: "12px",
+            gap: "6px",
+            marginBottom: "10px",
           }}>
             <div style={{
-              width: "28px",
-              height: "28px",
-              borderRadius: "6px",
+              width: "24px",
+              height: "24px",
+              borderRadius: "5px",
               background: "#1f2937",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
             }}>
-              <span style={{ color: "white", fontSize: "12px", fontWeight: "bold" }}>测</span>
+              <span style={{ color: "white", fontSize: "11px", fontWeight: "bold" }}>测</span>
             </div>
-            <span style={{ fontSize: "12px", color: "#6b7280", fontWeight: "500" }}>
+            <span style={{ fontSize: "11px", color: "#6b7280", fontWeight: "500" }}>
               朋友圈人设测试
             </span>
           </div>
         </div>
 
         {/* 标签 */}
-        <div style={{ textAlign: "center", marginBottom: "16px" }}>
+        <div style={{ textAlign: "center", marginBottom: "14px" }}>
           <span style={{
             display: "inline-block",
-            padding: "4px 12px",
+            padding: "4px 10px",
             background: "#1f2937",
-            borderRadius: "12px",
+            borderRadius: "10px",
             color: "white",
-            fontSize: "11px",
+            fontSize: "10px",
             fontWeight: "500",
           }}>
             你的隐藏人设
@@ -114,42 +114,42 @@ export default function ShareCard({ result, percentage }: ShareCardProps) {
         {/* 主卡片 */}
         <div style={{
           background: "#f9fafb",
-          borderRadius: "16px",
-          padding: "20px",
+          borderRadius: "14px",
+          padding: "18px",
         }}>
           {/* 人设名称 */}
           <h2 style={{
-            fontSize: "20px",
+            fontSize: "18px",
             fontWeight: "800",
             textAlign: "center",
             color: "#111827",
-            margin: "0 0 6px",
+            margin: "0 0 5px",
           }}>
             {result.title}
           </h2>
 
           {/* 标语 */}
           <p style={{
-            fontSize: "12px",
+            fontSize: "11px",
             color: "#6b7280",
             textAlign: "center",
-            margin: "0 0 14px",
+            margin: "0 0 12px",
             lineHeight: "1.5",
           }}>
             {result.tagline}
           </p>
 
           {/* 关键词 */}
-          <div style={{ display: "flex", justifyContent: "center", gap: "6px", marginBottom: "14px", flexWrap: "wrap" }}>
+          <div style={{ display: "flex", justifyContent: "center", gap: "5px", marginBottom: "12px", flexWrap: "wrap" }}>
             {result.keywords.map((keyword, idx) => (
               <span
                 key={idx}
                 style={{
-                  padding: "3px 8px",
+                  padding: "2px 7px",
                   background: "#fee2e2",
                   color: "#dc2626",
-                  borderRadius: "8px",
-                  fontSize: "10px",
+                  borderRadius: "6px",
+                  fontSize: "9px",
                   fontWeight: "500",
                 }}
               >
@@ -159,24 +159,24 @@ export default function ShareCard({ result, percentage }: ShareCardProps) {
           </div>
 
           {/* 四项指数 */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginBottom: "14px" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "6px", marginBottom: "12px" }}>
             {[
               { label: "表达欲", value: result.scores.expression, color: "#3b82f6" },
               { label: "神秘感", value: result.scores.mystery, color: "#8b5cf6" },
               { label: "发疯指数", value: result.scores.chaos, color: "#f59e0b" },
               { label: "社交电量", value: result.scores.social, color: "#10b981" },
             ].map((item, idx) => (
-              <div key={idx} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <span style={{ fontSize: "10px", color: "#6b7280", width: "48px" }}>{item.label}</span>
-                <div style={{ flex: 1, height: "6px", background: "#e5e7eb", borderRadius: "3px", overflow: "hidden" }}>
+              <div key={idx} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                <span style={{ fontSize: "9px", color: "#6b7280", width: "44px" }}>{item.label}</span>
+                <div style={{ flex: 1, height: "5px", background: "#e5e7eb", borderRadius: "2px", overflow: "hidden" }}>
                   <div style={{
                     width: `${item.value}%`,
                     height: "100%",
                     background: item.color,
-                    borderRadius: "3px",
+                    borderRadius: "2px",
                   }} />
                 </div>
-                <span style={{ fontSize: "10px", color: "#374151", fontWeight: "600", width: "28px", textAlign: "right" }}>
+                <span style={{ fontSize: "9px", color: "#374151", fontWeight: "600", width: "26px", textAlign: "right" }}>
                   {item.value}%
                 </span>
               </div>
@@ -186,20 +186,20 @@ export default function ShareCard({ result, percentage }: ShareCardProps) {
           {/* 代表文案 */}
           <div style={{
             background: "#ffffff",
-            borderRadius: "10px",
-            padding: "10px",
-            marginBottom: "10px",
+            borderRadius: "8px",
+            padding: "8px",
+            marginBottom: "8px",
             textAlign: "center",
           }}>
-            <p style={{ fontSize: "9px", color: "#9ca3af", margin: "0 0 3px" }}>朋友圈代表文案</p>
-            <p style={{ fontSize: "13px", fontWeight: "600", color: "#111827", margin: 0 }}>
+            <p style={{ fontSize: "8px", color: "#9ca3af", margin: "0 0 2px" }}>朋友圈代表文案</p>
+            <p style={{ fontSize: "12px", fontWeight: "600", color: "#111827", margin: 0 }}>
               「{result.quote}」
             </p>
           </div>
 
           {/* 建议 */}
           <p style={{
-            fontSize: "10px",
+            fontSize: "9px",
             color: "#6b7280",
             textAlign: "center",
             lineHeight: "1.4",
@@ -211,12 +211,12 @@ export default function ShareCard({ result, percentage }: ShareCardProps) {
           {/* 百分比 */}
           {percentage && (
             <div style={{
-              marginTop: "10px",
-              paddingTop: "10px",
+              marginTop: "8px",
+              paddingTop: "8px",
               borderTop: "1px solid #e5e7eb",
               textAlign: "center",
             }}>
-              <p style={{ fontSize: "13px", fontWeight: "700", color: "#dc2626", margin: 0 }}>
+              <p style={{ fontSize: "12px", fontWeight: "700", color: "#dc2626", margin: 0 }}>
                 🏆 超过了 {percentage}% 的测试者
               </p>
             </div>
@@ -224,8 +224,8 @@ export default function ShareCard({ result, percentage }: ShareCardProps) {
         </div>
 
         {/* 底部链接 */}
-        <div style={{ textAlign: "center", marginTop: "16px" }}>
-          <p style={{ fontSize: "10px", color: "#9ca3af", margin: 0 }}>
+        <div style={{ textAlign: "center", marginTop: "12px" }}>
+          <p style={{ fontSize: "9px", color: "#9ca3af", margin: 0 }}>
             mybookstores.github.io/quiz-site
           </p>
         </div>
@@ -238,7 +238,7 @@ export default function ShareCard({ result, percentage }: ShareCardProps) {
           className={clsx(
             "w-full py-3.5 rounded-2xl font-semibold text-sm transition-all duration-200",
             "flex items-center justify-center gap-2",
-            "bg-gray-900 text-white",
+            "bg-black text-white",
             "hover:bg-gray-800 active:scale-[0.99]"
           )}
         >
@@ -253,7 +253,7 @@ export default function ShareCard({ result, percentage }: ShareCardProps) {
           className={clsx(
             "w-full py-3 rounded-2xl font-medium text-sm transition-all duration-200",
             "flex items-center justify-center gap-2",
-            "border border-gray-200 text-gray-600",
+            "bg-white border border-gray-200 text-gray-700",
             "hover:bg-gray-50 active:scale-[0.99]"
           )}
         >
