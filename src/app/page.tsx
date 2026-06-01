@@ -201,62 +201,65 @@ export default function Home() {
       {/* 首页 */}
       {page === "home" && (
         <div className="animate-fade-in max-w-md w-full text-center">
-          {/* 顶部装饰 */}
-          <div className="mb-6">
-            <div className="w-20 h-20 mx-auto mb-4 rounded-3xl bg-gradient-to-br from-pink-400 to-accent flex items-center justify-center shadow-xl shadow-pink-500/30">
-              <span className="text-4xl">🎭</span>
+          {/* 顶部装饰 - 使用渐变圆形背景 */}
+          <div className="mb-6 relative">
+            <div className="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-rose-200 via-pink-200 to-fuchsia-200 flex items-center justify-center shadow-lg shadow-pink-200/50">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-rose-400 to-pink-500 flex items-center justify-center">
+                <span className="text-white text-xl font-bold">人</span>
+              </div>
             </div>
           </div>
 
           {/* 标题区域 */}
           <div className="space-y-3 mb-8">
             <h1 className={clsx(
-              "text-3xl font-bold leading-tight",
-              isDarkMode ? "text-white" : "text-[#881337]"
+              "text-2xl font-extrabold tracking-tight",
+              isDarkMode ? "text-white" : "bg-gradient-to-r from-rose-600 via-pink-600 to-fuchsia-600 bg-clip-text text-transparent"
             )}>
-              你的朋友圈<br />隐藏人设测试
+              朋友圈隐藏人设
             </h1>
             <p className={clsx(
-              "text-sm leading-relaxed px-4",
+              "text-sm leading-relaxed px-2",
               isDarkMode ? "text-gray-400" : "text-gray-500"
             )}>
-              你以为你只是随便发发<br />别人可能早就给你立好了人设
+              12道题 · 测出你在朋友圈的真实人设
             </p>
           </div>
 
-          {/* 人设预览轮播 */}
+          {/* 人设预览 - 横向滚动样式 */}
           <div className={clsx(
-            "relative rounded-3xl p-6 mb-8 overflow-hidden",
-            isDarkMode ? "bg-gray-800/50" : "bg-white/60"
+            "relative rounded-2xl p-5 mb-8 overflow-hidden",
+            isDarkMode ? "bg-gray-800/60" : "bg-white/80 backdrop-blur-sm"
           )}>
-            <div className="grid grid-cols-4 gap-3">
+            <div className="flex overflow-x-auto gap-4 pb-2 hide-scrollbar">
               {[
-                { icon: "🎭", label: "神秘NPC", bg: "bg-purple-100", darkBg: "bg-purple-900/30", text: "text-purple-600", darkText: "text-purple-300" },
-                { icon: "🎨", label: "营业艺术家", bg: "bg-pink-100", darkBg: "bg-pink-900/30", text: "text-pink-600", darkText: "text-pink-300" },
-                { icon: "🌪️", label: "发疯选手", bg: "bg-amber-100", darkBg: "bg-amber-900/30", text: "text-amber-600", darkText: "text-amber-300" },
-                { icon: "🎉", label: "气氛组长", bg: "bg-blue-100", darkBg: "bg-blue-900/30", text: "text-blue-600", darkText: "text-blue-300" },
-                { icon: "🌙", label: "深夜诗人", bg: "bg-indigo-100", darkBg: "bg-indigo-900/30", text: "text-indigo-600", darkText: "text-indigo-300" },
-                { icon: "📸", label: "真实记录", bg: "bg-green-100", darkBg: "bg-green-900/30", text: "text-green-600", darkText: "text-green-300" },
-                { icon: "💬", label: "废话机器", bg: "bg-orange-100", darkBg: "bg-orange-900/30", text: "text-orange-600", darkText: "text-orange-300" },
-                { icon: "🔇", label: "潜水观察", bg: "bg-gray-100", darkBg: "bg-gray-700/30", text: "text-gray-600", darkText: "text-gray-400" },
+                { label: "神秘人", color: "from-purple-500 to-violet-500" },
+                { label: "营业艺术家", color: "from-pink-500 to-rose-500" },
+                { label: "发疯选手", color: "from-amber-500 to-orange-500" },
+                { label: "气氛组长", color: "from-blue-500 to-cyan-500" },
+                { label: "深夜诗人", color: "from-indigo-500 to-purple-500" },
+                { label: "真实记录", color: "from-green-500 to-emerald-500" },
+                { label: "废话机器", color: "from-orange-500 to-red-500" },
+                { label: "潜水观察", color: "from-gray-500 to-gray-600" },
               ].map((item, i) => (
-                <div key={i} className="text-center animate-pulse-soft" style={{ animationDelay: `${i * 0.1}s` }}>
-                  <div className={clsx(
-                    "w-12 h-12 mx-auto rounded-2xl flex items-center justify-center mb-1",
-                    isDarkMode ? item.darkBg : item.bg
-                  )}>
-                    <span className="text-xl">{item.icon}</span>
-                  </div>
-                  <span className={clsx("text-xs", isDarkMode ? item.darkText : item.text)}>
-                    {item.label}
-                  </span>
+                <div
+                  key={i}
+                  className={clsx(
+                    "flex-shrink-0 px-4 py-2 rounded-full bg-gradient-to-r text-white text-sm font-medium shadow-sm",
+                    item.color
+                  )}
+                >
+                  {item.label}
                 </div>
               ))}
             </div>
           </div>
 
           {/* 数据统计 */}
-          <div className="flex justify-center gap-8 mb-8">
+          <div className={clsx(
+            "flex justify-center items-center gap-6 mb-8 py-4 rounded-2xl",
+            isDarkMode ? "bg-gray-800/40" : "bg-rose-50/50"
+          )}>
             {[
               { num: "8", label: "种人设" },
               { num: "12", label: "道题" },
@@ -264,13 +267,13 @@ export default function Home() {
             ].map((stat, i) => (
               <div key={i} className="text-center">
                 <div className={clsx(
-                  "text-2xl font-bold",
-                  isDarkMode ? "text-white" : "text-[#881337]"
+                  "text-3xl font-black",
+                  isDarkMode ? "text-white" : "text-rose-600"
                 )}>
                   {stat.num}
                 </div>
                 <div className={clsx(
-                  "text-xs",
+                  "text-xs mt-0.5",
                   isDarkMode ? "text-gray-500" : "text-gray-400"
                 )}>
                   {stat.label}
@@ -279,14 +282,20 @@ export default function Home() {
             ))}
           </div>
 
-          {/* 开始按钮 */}
+          {/* 开始按钮 - 更现代的样式 */}
           <button
             onClick={handleStart}
-            className="w-full py-4 bg-gradient-to-r from-pink-500 to-accent text-white font-bold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2"
+            className={clsx(
+              "w-full py-4 rounded-2xl font-bold text-base transition-all duration-300 flex items-center justify-center gap-2 shadow-lg",
+              "hover:shadow-xl hover:scale-[1.02] active:scale-[0.98]",
+              isDarkMode
+                ? "bg-gradient-to-r from-gray-100 to-white text-gray-900 shadow-gray-300/20"
+                : "bg-gradient-to-r from-rose-500 via-pink-500 to-fuchsia-500 text-white shadow-rose-300/40"
+            )}
           >
             <span>开始测试</span>
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           </button>
 
@@ -295,7 +304,7 @@ export default function Home() {
             "mt-4 text-xs",
             isDarkMode ? "text-gray-600" : "text-gray-400"
           )}>
-            🔥 已有 10,000+ 人测试 · 生成的图片可分享到朋友圈
+            🔥 10,000+ 人已测试 · 生成专属人设卡
           </p>
         </div>
       )}
