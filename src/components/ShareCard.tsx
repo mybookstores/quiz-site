@@ -79,7 +79,7 @@ export default function ShareCard({ result, percentage }: ShareCardProps) {
           left: 0,
           top: 0,
           width: "320px",
-          backgroundColor: "#ffffff",
+          background: "linear-gradient(135deg, #fff1f2 0%, #fce7f3 50%, #fdf2f8 100%)",
           fontFamily: "system-ui, -apple-system, 'PingFang SC', sans-serif",
           padding: "20px",
           boxSizing: "border-box",
