@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useCallback, useState } from "react";
-import html2canvas from "html2canvas";
+import { toPng } from "html-to-image";
 import clsx from "clsx";
 import type { Result } from "@/data/quiz";
 
@@ -14,6 +14,7 @@ export default function ShareCard({ result, percentage }: ShareCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [showToast, setShowToast] = useState(false);
   const [toastText, setToastText] = useState("");
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const showToastMsg = (text: string) => {
     setToastText(text);
@@ -27,22 +28,24 @@ export default function ShareCard({ result, percentage }: ShareCardProps) {
       return;
     }
 
+    setIsGenerating(true);
+
     try {
-      const canvas = await html2canvas(cardRef.current, {
-        scale: 2,
-        backgroundColor: "#ffffff",
-        useCORS: true,
-        logging: false,
+      const dataUrl = await toPng(cardRef.current, {
+        quality: 0.95,
+        pixelRatio: 2,
       });
 
       const link = document.createElement("a");
       link.download = `朋友圈人设-${result.title}.png`;
-      link.href = canvas.toDataURL("image/png", 0.95);
+      link.href = dataUrl;
       link.click();
       showToastMsg("✓ 图片已保存");
     } catch (error) {
       console.error("生成图片失败:", error);
       showToastMsg("生成失败，请重试");
+    } finally {
+      setIsGenerating(false);
     }
   }, [result]);
 
@@ -223,12 +226,25 @@ export default function ShareCard({ result, percentage }: ShareCardProps) {
       <div className="space-y-3">
         <button
           onClick={handleSaveImage}
-          className="w-full py-3.5 rounded-xl font-semibold text-sm transition-all duration-200 flex items-center justify-center gap-2 bg-black text-white hover:bg-gray-800 active:scale-[0.99]"
+          disabled={isGenerating}
+          className="w-full py-3.5 rounded-xl font-semibold text-sm transition-all duration-200 flex items-center justify-center gap-2 bg-black text-white hover:bg-gray-800 active:scale-[0.99] disabled:opacity-60"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-          </svg>
-          保存图片
+          {isGenerating ? (
+            <>
+              <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+              </svg>
+              生成中...
+            </>
+          ) : (
+            <>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              保存图片
+            </>
+          )}
         </button>
 
         <button
