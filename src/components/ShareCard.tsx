@@ -34,6 +34,16 @@ export default function ShareCard({ result, percentage }: ShareCardProps) {
       const dataUrl = await toPng(cardRef.current, {
         quality: 0.95,
         pixelRatio: 2,
+        // 忽略 visibility 和 display 样式
+        style: {
+          transform: "none",
+          transformOrigin: "top left",
+        },
+        // 允许渲染 visibility:hidden 的元素
+        filter: (node) => {
+          // 不过滤任何节点
+          return true;
+        },
       });
 
       const link = document.createElement("a");
@@ -60,18 +70,21 @@ export default function ShareCard({ result, percentage }: ShareCardProps) {
 
   return (
     <>
-      {/* 隐藏的分享卡片 */}
+      {/* 分享卡片 - 始终可见，只是不占用视觉空间 */}
       <div
         ref={cardRef}
+        className="pointer-events-none"
         style={{
-          position: "absolute",
-          left: "-9999px",
-          top: "-9999px",
+          position: "fixed",
+          left: 0,
+          top: 0,
           width: "320px",
           backgroundColor: "#ffffff",
           fontFamily: "system-ui, -apple-system, 'PingFang SC', sans-serif",
           padding: "20px",
           boxSizing: "border-box",
+          zIndex: -1,
+          opacity: 1,
         }}
       >
         {/* 标题 */}
