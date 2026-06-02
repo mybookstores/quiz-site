@@ -64,40 +64,27 @@ export default function ShareCard({ result, percentage }: ShareCardProps) {
           position: "absolute",
           left: "-9999px",
           top: "-9999px",
-          width: "340px",
+          width: "320px",
           backgroundColor: "#ffffff",
           fontFamily: "system-ui, -apple-system, 'PingFang SC', sans-serif",
-          padding: "24px 20px",
+          padding: "20px",
           boxSizing: "border-box",
         }}
       >
-        {/* 顶部品牌区 */}
-        <div style={{ textAlign: "center", marginBottom: "16px" }}>
+        {/* 标题 */}
+        <div style={{ textAlign: "center", marginBottom: "14px" }}>
           <div style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "6px",
-            marginBottom: "10px",
+            fontSize: "13px",
+            color: "#1f2937",
+            fontWeight: "600",
+            marginBottom: "8px"
           }}>
-            <div style={{
-              width: "22px",
-              height: "22px",
-              borderRadius: "5px",
-              background: "#1f2937",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}>
-              <span style={{ color: "white", fontSize: "10px", fontWeight: "bold" }}>测</span>
-            </div>
-            <span style={{ fontSize: "11px", color: "#6b7280", fontWeight: "500" }}>
-              朋友圈人设测试
-            </span>
+            朋友圈人设测试
           </div>
           <div style={{
             display: "inline-block",
-            padding: "4px 12px",
-            background: "#1f2937",
+            padding: "4px 14px",
+            backgroundColor: "#1f2937",
             borderRadius: "12px",
             color: "white",
             fontSize: "11px",
@@ -109,14 +96,14 @@ export default function ShareCard({ result, percentage }: ShareCardProps) {
 
         {/* 主卡片 */}
         <div style={{
-          background: "#f9fafb",
-          borderRadius: "16px",
+          backgroundColor: "#f9fafb",
+          borderRadius: "14px",
           padding: "16px",
         }}>
           {/* 人设名称 */}
           <h2 style={{
-            fontSize: "18px",
-            fontWeight: "800",
+            fontSize: "17px",
+            fontWeight: "700",
             textAlign: "center",
             color: "#111827",
             margin: "0 0 6px",
@@ -130,23 +117,28 @@ export default function ShareCard({ result, percentage }: ShareCardProps) {
             color: "#6b7280",
             textAlign: "center",
             margin: "0 0 12px",
-            lineHeight: "1.5",
+            lineHeight: "1.4",
           }}>
             {result.tagline}
           </p>
 
           {/* 关键词 */}
-          <div style={{ display: "flex", justifyContent: "center", gap: "5px", marginBottom: "12px", flexWrap: "wrap" }}>
+          <div style={{
+            display: "flex",
+            justifyContent: "center",
+            gap: "4px",
+            marginBottom: "12px",
+            flexWrap: "wrap" as const
+          }}>
             {result.keywords.map((keyword, idx) => (
               <span
                 key={idx}
                 style={{
-                  padding: "2px 8px",
-                  background: "#fee2e2",
+                  padding: "2px 7px",
+                  backgroundColor: "#fee2e2",
                   color: "#dc2626",
-                  borderRadius: "8px",
-                  fontSize: "10px",
-                  fontWeight: "500",
+                  borderRadius: "6px",
+                  fontSize: "9px",
                 }}
               >
                 {keyword}
@@ -155,24 +147,24 @@ export default function ShareCard({ result, percentage }: ShareCardProps) {
           </div>
 
           {/* 四项指数 */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginBottom: "12px" }}>
+          <div style={{ display: "flex", flexDirection: "column" as const, gap: "6px", marginBottom: "10px" }}>
             {[
               { label: "表达欲", value: result.scores.expression, color: "#3b82f6" },
               { label: "神秘感", value: result.scores.mystery, color: "#8b5cf6" },
               { label: "发疯指数", value: result.scores.chaos, color: "#f59e0b" },
               { label: "社交电量", value: result.scores.social, color: "#10b981" },
             ].map((item, idx) => (
-              <div key={idx} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <span style={{ fontSize: "10px", color: "#6b7280", width: "48px" }}>{item.label}</span>
-                <div style={{ flex: 1, height: "6px", background: "#e5e7eb", borderRadius: "3px", overflow: "hidden" }}>
+              <div key={idx} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                <span style={{ fontSize: "9px", color: "#6b7280", width: "44px" }}>{item.label}</span>
+                <div style={{ flex: 1, height: "5px", backgroundColor: "#e5e7eb", borderRadius: "2px", overflow: "hidden" }}>
                   <div style={{
                     width: `${item.value}%`,
                     height: "100%",
-                    background: item.color,
-                    borderRadius: "3px",
+                    backgroundColor: item.color,
+                    borderRadius: "2px",
                   }} />
                 </div>
-                <span style={{ fontSize: "10px", color: "#374151", fontWeight: "600", width: "30px", textAlign: "right" }}>
+                <span style={{ fontSize: "9px", color: "#374151", fontWeight: "500", width: "28px", textAlign: "right" as const }}>
                   {item.value}%
                 </span>
               </div>
@@ -181,23 +173,23 @@ export default function ShareCard({ result, percentage }: ShareCardProps) {
 
           {/* 代表文案 */}
           <div style={{
-            background: "#ffffff",
-            borderRadius: "10px",
-            padding: "10px",
-            marginBottom: "10px",
-            textAlign: "center",
+            backgroundColor: "#ffffff",
+            borderRadius: "8px",
+            padding: "8px",
+            marginBottom: "8px",
+            textAlign: "center" as const,
           }}>
-            <p style={{ fontSize: "9px", color: "#9ca3af", margin: "0 0 3px" }}>朋友圈代表文案</p>
-            <p style={{ fontSize: "13px", fontWeight: "600", color: "#111827", margin: 0 }}>
+            <p style={{ fontSize: "8px", color: "#9ca3af", margin: "0 0 2px" }}>朋友圈代表文案</p>
+            <p style={{ fontSize: "12px", fontWeight: "600", color: "#111827", margin: 0 }}>
               「{result.quote}」
             </p>
           </div>
 
           {/* 建议 */}
           <p style={{
-            fontSize: "10px",
+            fontSize: "9px",
             color: "#6b7280",
-            textAlign: "center",
+            textAlign: "center" as const,
             lineHeight: "1.4",
             margin: 0,
           }}>
@@ -207,12 +199,12 @@ export default function ShareCard({ result, percentage }: ShareCardProps) {
           {/* 百分比 */}
           {percentage && (
             <div style={{
-              marginTop: "10px",
-              paddingTop: "10px",
+              marginTop: "8px",
+              paddingTop: "8px",
               borderTop: "1px solid #e5e7eb",
-              textAlign: "center",
+              textAlign: "center" as const,
             }}>
-              <p style={{ fontSize: "13px", fontWeight: "700", color: "#dc2626", margin: 0 }}>
+              <p style={{ fontSize: "12px", fontWeight: "700", color: "#dc2626", margin: 0 }}>
                 🏆 超过了 {percentage}% 的测试者
               </p>
             </div>
@@ -220,8 +212,8 @@ export default function ShareCard({ result, percentage }: ShareCardProps) {
         </div>
 
         {/* 底部链接 */}
-        <div style={{ textAlign: "center", marginTop: "12px" }}>
-          <p style={{ fontSize: "10px", color: "#9ca3af", margin: 0 }}>
+        <div style={{ textAlign: "center", marginTop: "10px" }}>
+          <p style={{ fontSize: "9px", color: "#9ca3af", margin: 0 }}>
             mybookstores.github.io/quiz-site
           </p>
         </div>
